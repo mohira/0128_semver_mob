@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import unittest
 
 
@@ -7,6 +9,12 @@ class SemVer:
 
     def __str__(self):
         return f"{self.major}.{self.minor}.{self.patch}"
+
+    def __eq__(self, other: SemVer):
+        return isinstance(other, SemVer) and \
+               self.major == other.major and \
+               self.minor == other.minor and \
+               self.patch == other.patch
 
 
 class TestSemVer(unittest.TestCase):
@@ -19,6 +27,18 @@ class TestSemVer(unittest.TestCase):
         semver = SemVer(major=2, minor=5, patch=6)
 
         self.assertEqual("2.5.6", str(semver))
+
+    def test_等価性を比較できる_等しい場合(self):
+        semver1 = SemVer(1, 4, 2)
+        semver2 = SemVer(1, 4, 2)
+
+        self.assertEqual(semver1, semver2)
+
+    def test_等価性を比較できる_等しくない場合(self):
+        semver1 = SemVer(1, 4, 2)
+        semver2 = SemVer(2, 4, 2)
+
+        self.assertNotEqual(semver1, semver2)
 
 
 if __name__ == "__main__":
